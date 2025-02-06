@@ -95,6 +95,12 @@ class LinkedList {
     this.size--
     return
   }
+
+  clear() {
+    this.head = null
+    this.tail = null
+    this.size = 0
+  }
 }
 
 class Node {
@@ -173,8 +179,14 @@ class HashMap {
     }
     return false
   }
+
   length() {
     return this.size
+  }
+
+  clear() {
+    this.size = 0
+    this.buckets.forEach((bucket) => bucket.clear())
   }
 }
 
@@ -190,3 +202,6 @@ table.set("Piero", "Albondiga")
 console.log(table.length())
 table.remove("Piero")
 console.log(table.length())
+table.clear()
+console.log(table.length())
+console.log(table.get("ASD"))
