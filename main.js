@@ -168,14 +168,25 @@ class HashMap {
     let index = this.hash(key)
     let bucket = this.buckets[index]
     if (bucket.contains(key)) {
+      this.size--
       return bucket.remove(key)
     }
     return false
+  }
+  length() {
+    return this.size
   }
 }
 
 const table = new HashMap()
 table.set("Piero", "Alcantara")
-console.log(table.get("Piero"))
-console.log(table.remove("Piero"))
-console.log(table.get("Piero"))
+table.set("ASD", "Alcantara")
+table.set("ADS", "Alcantara")
+table.set("AVD", "Alcantara")
+table.set("ACV", "Alcantara")
+
+console.log(table.length())
+table.set("Piero", "Albondiga")
+console.log(table.length())
+table.remove("Piero")
+console.log(table.length())
