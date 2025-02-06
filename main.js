@@ -75,6 +75,9 @@ class LinkedList {
     return false
   }
 
+  size() {
+    return this.size
+  }
   pop() {
     if (this.size === 0) {
       return
@@ -168,6 +171,10 @@ class HashMap {
   set(key, value) {
     let index = this.hash(key)
     let bucket = this.buckets[index]
+
+    if (index < 0 || index >= this.buckets.capacity) {
+      throw new Error("Trying to access index out of bounds")
+    }
     // If a key already exists
     if (bucket.contains(key)) {
       // Then the old value is overwritten
@@ -179,11 +186,15 @@ class HashMap {
     // the same hash code and get assigned to the same bucket.
     bucket.append(key, value) // Since we are using linked lists, then appending handles it
     this.size++
+    this.#grow()
   }
 
   get(key) {
     let index = this.hash(key)
     let bucket = this.buckets[index] // We retrieve the correct bucket which we are consulting
+    if (index < 0 || index >= this.buckets.capacity) {
+      throw new Error("Trying to access index out of bounds")
+    }
     if (bucket.contains(key)) {
       //If the key exists then its value exists
       return bucket.at(key).value // return the value
@@ -195,12 +206,18 @@ class HashMap {
   has(key) {
     let index = this.hash(key)
     let bucket = this.buckets[index] // We retrieve the correct bucket which we are consulting
+    if (index < 0 || index >= this.buckets.capacity) {
+      throw new Error("Trying to access index out of bounds")
+    }
     return bucket.contains(key)
   }
 
   remove(key) {
     let index = this.hash(key)
     let bucket = this.buckets[index]
+    if (index < 0 || index >= buckets.length) {
+      throw new Error("Trying to access index out of bounds")
+    }
     if (bucket.contains(key)) {
       this.size--
       return bucket.remove(key)
@@ -252,6 +269,30 @@ class HashMap {
     }
     return entries
   }
+
+  #grow() {
+    if (this.size > this.loadFactor * this.capacity) {
+      // If we overflow the load factor of entries
+      this.capacity = this.capacity * 2 // Double the capacity
+      let newBuckets = new Array(this.capacity) // Create a new array of linked lists with the doubled capacity
+        .fill(null)
+        .map(() => new LinkedList())
+
+      for (let i = 0; i < this.buckets.length; i++) {
+        // Iterate over the old length of buckets
+        if (this.buckets[i].size > 0) {
+          // If not null then
+          let current = this.buckets[i].head // get current node
+          while (current) {
+            let newIndex = this.hash(current.key) // Rehash the index
+            newBuckets[newIndex].append(current.key, current.value) // Append the rehashed pair
+            current = current.next // Update current
+          }
+        }
+      }
+      this.buckets = newBuckets // Update this.buckets
+    }
+  }
 }
 
 const test = new HashMap()
@@ -267,5 +308,7 @@ test.set("ice cream", "white")
 test.set("jacket", "blue")
 test.set("kite", "pink")
 test.set("lion", "golden")
-
-console.log(test.entries())
+test.set("lion", "yellow")
+console.log(test)
+test.set("moon", "silver")
+console.log(test)
