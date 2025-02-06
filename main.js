@@ -101,6 +101,34 @@ class LinkedList {
     this.tail = null
     this.size = 0
   }
+
+  getKeys() {
+    if (this.size === 0) {
+      return null
+    }
+
+    let keys = []
+    let current = this.head
+    while (current) {
+      keys.push(current.key)
+      current = current.next
+    }
+    return keys
+  }
+
+  getValues() {
+    if (this.size === 0) {
+      return null
+    }
+
+    let values = []
+    let current = this.head
+    while (current) {
+      values.push(current.value)
+      current = current.next
+    }
+    return values
+  }
 }
 
 class Node {
@@ -188,6 +216,22 @@ class HashMap {
     this.size = 0
     this.buckets.forEach((bucket) => bucket.clear())
   }
+
+  keys() {
+    let keys = []
+    this.buckets.forEach((bucket) => (keys = keys.concat(bucket.getKeys())))
+    let isNotNull = (value) => value != null
+    return keys.filter(isNotNull)
+  }
+
+  values() {
+    let values = []
+    this.buckets.forEach(
+      (bucket) => (values = values.concat(bucket.getValues()))
+    )
+    let isNotNull = (value) => value != null
+    return values.filter(isNotNull)
+  }
 }
 
 const table = new HashMap()
@@ -202,6 +246,5 @@ table.set("Piero", "Albondiga")
 console.log(table.length())
 table.remove("Piero")
 console.log(table.length())
-table.clear()
-console.log(table.length())
-console.log(table.get("ASD"))
+console.log(table.keys())
+console.log(table.values())
