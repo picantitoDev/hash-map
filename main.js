@@ -232,19 +232,40 @@ class HashMap {
     let isNotNull = (value) => value != null
     return values.filter(isNotNull)
   }
+
+  entries() {
+    let entries = []
+    let keys = []
+    let values = []
+
+    this.buckets.forEach((bucket) => (keys = keys.concat(bucket.getKeys())))
+    this.buckets.forEach(
+      (bucket) => (values = values.concat(bucket.getValues()))
+    )
+
+    let isNotNull = (value) => value != null
+    keys = keys.filter(isNotNull)
+    values = values.filter(isNotNull)
+
+    for (let i = 0; i < this.size; i++) {
+      entries.push([keys[i], values[i]])
+    }
+    return entries
+  }
 }
 
-const table = new HashMap()
-table.set("Piero", "Alcantara")
-table.set("ASD", "Alcantara")
-table.set("ADS", "Alcantara")
-table.set("AVD", "Alcantara")
-table.set("ACV", "Alcantara")
+const test = new HashMap()
+test.set("apple", "red")
+test.set("banana", "yellow")
+test.set("carrot", "orange")
+test.set("dog", "brown")
+test.set("elephant", "gray")
+test.set("frog", "green")
+test.set("grape", "purple")
+test.set("hat", "black")
+test.set("ice cream", "white")
+test.set("jacket", "blue")
+test.set("kite", "pink")
+test.set("lion", "golden")
 
-console.log(table.length())
-table.set("Piero", "Albondiga")
-console.log(table.length())
-table.remove("Piero")
-console.log(table.length())
-console.log(table.keys())
-console.log(table.values())
+console.log(test.entries())
